@@ -516,6 +516,8 @@ func (c *dockerClient) makeRequestToResolvedURLOnce(ctx context.Context, method,
 	logrus.Debugf("%s %s", method, url)
 	res, err := c.client.Do(req)
 	if err != nil {
+		logrus.Debugf("Failed request: %s", req)
+		logrus.Debugf("Failed response: %s", res)
 		return nil, err
 	}
 	return res, nil
