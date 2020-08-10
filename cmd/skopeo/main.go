@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"os"
+	"runtime/pprof"
 
 	"github.com/containers/image/v5/signature"
 	"github.com/containers/image/v5/types"
@@ -100,6 +102,13 @@ func main() {
 		return
 	}
 	rootCmd, _ := createApp()
+
+	f, err := os.Create("skopeo-cpu.prof")
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	pprof.StartCPUProfile(f)
+	defer pprof.StopCPUProfile()
 	if err := rootCmd.Execute(); err != nil {
 		logrus.Fatal(err)
 	}
