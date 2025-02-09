@@ -463,6 +463,7 @@ func (ic *imageCopier) copyLayers(ctx context.Context) ([]compressiontypes.Algor
 		return nil, err
 	}
 	manifestLayerInfos := man.LayerInfos()
+	logrus.Debugf("Manifest layer copy operation: %+v", manifestLayerInfos)
 
 	// copyGroup is used to determine if all layers are copied
 	copyGroup := sync.WaitGroup{}
@@ -555,6 +556,7 @@ func (ic *imageCopier) copyLayers(ctx context.Context) ([]compressiontypes.Algor
 	if srcInfosUpdated || layerDigestsDiffer(srcInfos, destInfos) {
 		ic.manifestUpdates.LayerInfos = destInfos
 	}
+	logrus.Debugf("Finished copying layer, manifest updates: %+v", ic.manifestUpdates)
 	algos, err := algorithmsByNames(compressionAlgos.Values())
 	if err != nil {
 		return nil, err
@@ -614,6 +616,7 @@ func (ic *imageCopier) copyUpdatedConfigAndManifest(ctx context.Context, instanc
 		logrus.Debugf("Error %v while writing manifest %q", err, string(man))
 		return nil, "", fmt.Errorf("writing manifest: %w", err)
 	}
+	logrus.Debugf("Dumping full manifest: %s", man)
 	return man, manifestDigest, nil
 }
 

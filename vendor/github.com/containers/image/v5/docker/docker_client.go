@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/containers/image/v5/docker/reference"
+	"github.com/containers/image/v5/internal/httpdump"
 	"github.com/containers/image/v5/internal/iolimits"
 	"github.com/containers/image/v5/internal/multierr"
 	"github.com/containers/image/v5/internal/set"
@@ -614,7 +615,7 @@ func (c *dockerClient) makeRequestToResolvedURLOnce(ctx context.Context, method 
 		}
 	}
 	logrus.Debugf("%s %s", method, resolvedURL.Redacted())
-	res, err := c.client.Do(req)
+	res, err := httpdump.DoRequest(c.client, req)
 	if err != nil {
 		return nil, err
 	}

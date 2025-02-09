@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/containers/image/v5/docker/reference"
+	"github.com/containers/image/v5/internal/httpdump"
 	"github.com/containers/image/v5/internal/iolimits"
 	"github.com/containers/image/v5/version"
 	"github.com/sirupsen/logrus"
@@ -95,7 +96,7 @@ func (c *openshiftClient) doRequest(ctx context.Context, method, path string, re
 	}
 
 	logrus.Debugf("%s %s", method, requestURL.Redacted())
-	res, err := c.httpClient.Do(req)
+	res, err := httpdump.DoRequest(c.httpClient, req)
 	if err != nil {
 		return nil, err
 	}
